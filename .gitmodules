@@ -1,0 +1,9 @@
+[submodule "externals/zlib"]
+	path = externals/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "externals/SDL"]
+	path = externals/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "externals/strings_h"]
+	path = externals/strings_h
+	url = https://github.com/win32ports/strings_h.git

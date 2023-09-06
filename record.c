@@ -27,7 +27,41 @@ static int reccc=0,recrl=0,rlleft=0;
 static uint32_t recp=0;
 static char recd,rld;
 
+//TODO: This should be fixed to support Linux and Windows
+//TODO: BLOCKER
+// https://stackoverflow.com/questions/2354784/attribute-formatprintf-1-2-for-msvc
+//TODO: This can be handled in CMake file using GenerateExportHeader? Should this be handled by cmake?
+#if defined(_MSC_VER)
+#define DLL_PUBLIC __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+#else
+#if defined(__GNUC__)
+#define DLL_PUBLIC __attribute__ ((dllexport))
+#endif
+#endif
+
+// compiler specific attribute translation
+// msvc should come first, so if clang is in msvc mode it gets the right defines
+// NOTE: this will only do checking in msvc with versions that support /analyze
+#ifdef _MSC_VER
+#include <stddef.h>
+#ifdef _USE_ATTRIBUTES_FOR_SAL
+#undef _USE_ATTRIBUTES_FOR_SAL
+#endif
+/* nolint */
+#define _USE_ATTRIBUTES_FOR_SAL 1
+#include <sal.h> // @manual
+#define FOLLY_PRINTF_FORMAT _Printf_format_string_
+#define FOLLY_PRINTF_FORMAT_ATTR(format_param, dots_param) /**/
+#else
+#define FOLLY_PRINTF_FORMAT /**/
+#define FOLLY_PRINTF_FORMAT_ATTR(format_param, dots_param) \
+  __attribute__((__format__(__printf__, format_param, dots_param)))
+#endif
+//#define BLOCKER
+//TODO: BLOCKER
+#ifdef BLOCKER
 static void mprintf(const char *f,...) __attribute__((format(printf, 1, 2)));;
+#endif
 static void makedir(int16_t *dir,bool *fire,char d);
 static char maked(int16_t dir,bool fire);
 

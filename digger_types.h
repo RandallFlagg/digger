@@ -37,7 +37,15 @@ struct obj_position
   int16_t y;
 };
 
-#define CALL_METHOD(obj, method, args...) (obj)->method(obj, ## args)
+//TODO: https://learn.microsoft.com/en-us/cpp/preprocessor/variadic-macros?view=msvc-170&redirectedfrom=MSDN
+//TODO: Fix the args parameter
+//#include <stdio.h>
+//#include<stdarg.h>
+//CALL_METHOD(nobbin, getpos, &newpos); This is a sample call
+//TODO: BLOCKER
+//This is the original call. I changed to the line below
+//#define CALL_METHOD(obj, method, args...) (obj)->method(obj, ## args)
+#define CALL_METHOD(obj, method, ...) (obj)->method(obj, ## __VA_ARGS__)
 
 #define DIR2STR(s, opp) \
   switch ((opp)->dir) { \
